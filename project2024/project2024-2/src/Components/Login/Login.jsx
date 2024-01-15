@@ -16,13 +16,12 @@ function Login() {
             fetch(`http://localhost:3000/users?username=${loginUser.Name}&&website=${loginUser.Password}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data)
                     if (data.length == 0)
                         alert("First time we meet? Sign up")
                     else {
                         setUser(data);
-                        localStorage.setItem("currentUser", JSON.stringify(data));
-                        navigate("/home");
+                        localStorage.setItem("currentUser", JSON.stringify(data))
+                       navigate(`/users/${data[0].id}`);
                     }
                 });
         }

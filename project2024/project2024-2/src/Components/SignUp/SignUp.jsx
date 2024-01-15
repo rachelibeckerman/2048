@@ -45,6 +45,7 @@ function SignUp() {
     );
     const [user, setUser] = useState(
         {
+
             id: "",
             name: "",
             username: "",
@@ -68,24 +69,48 @@ function SignUp() {
             }
         }
     );
-  
+
 
     useEffect(() => {
         if (signUp) {
-         
             fetch(`http://localhost:3000/users?username=${registerUser.Name}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data)
                     if (data.length > 0)
                         alert("We know you!! Sign In");
                     else {
                         setStatusSignUp("registered")
-
+                        fetch(`http://localhost:3000/nextId/1`)
+                            .then((res) => res.json())
+                            .then((data) => {
+                                setUser((prevProps) => ({
+                                    ...prevProps,
+                                    id: data.user
+                                }))
+                            })
                     }
                 });
         }
     }, [signUp])
+
+    useEffect(() => {
+        if (post) {
+            console.log("post")
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            };
+            fetch('http://localhost:3000/users', requestOptions)
+                .then(response => response.json())
+                .then((data) => {
+                    console.log(data)
+                    localStorage.setItem("currentUser", JSON.stringify(data))
+                    navigate(`/users/${data[0].id}`);
+                });
+        }
+
+    }, [post])
 
     const handleInputChange = (event) => {
         setSignUp(false);
@@ -130,26 +155,11 @@ function SignUp() {
     }
 
 
-    useEffect(() => {
-        if (post) {
-            console.log (user)
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
-            };
-            fetch('http://localhost:3000/users', requestOptions)
-                .then(response => response.json())
-                .then(data => alert(data));
-        }
-     
-    }, [post])
-
     function handleRegistered(event) {
         console.log("handle Registered")
         event.preventDefault();
         setUser({
-            id: "1",
+            id: user.id,
             name: user.name,
             username: registerUser.Name,
             email: user.email,
@@ -162,10 +172,21 @@ function SignUp() {
             },
             phone: user.phone,
             website: registerUser.Password,
-            company: company,
+            company: company
         });
-        setPost(true)
+        setPost(true);
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: `${parseInt(user.id) + 1}` })
+        };
+        fetch('http://localhost:3000/nextId/1', requestOptions)
+            .then(response => response.json())
+            .then((data) => {
+                console.log(data);
+            });
     }
+
 
     const handleSubmit = (event) => {
         console.log("handle")
