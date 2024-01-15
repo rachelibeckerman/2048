@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 function SignUp() {
     const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
+    const [post, setPost] = useState(false);
     const [statusSignUp, setStatusSignUp] = useState("start");
     const [registerUser, setRegisterUser] = useState(
         {
@@ -19,7 +20,7 @@ function SignUp() {
             PasswordConfirm: ""
         }
     )
-    const [geo,setGeo]=useState({
+    const [geo, setGeo] = useState({
         lat: "",
         lng: ""
     })
@@ -44,14 +45,14 @@ function SignUp() {
     );
     const [user, setUser] = useState(
         {
-            id: "1666",
+            id: "",
             name: "",
-            username: "y",
+            username: "",
             email: "",
             address: {
                 street: "",
                 suite: "",
-                city: "y",
+                city: "",
                 zipcode: "",
                 geo: {
                     lat: "",
@@ -67,14 +68,11 @@ function SignUp() {
             }
         }
     );
+  
 
-
-
-    console.log(user);
- 
     useEffect(() => {
         if (signUp) {
-            console.log("useffect signup")
+         
             fetch(`http://localhost:3000/users?username=${registerUser.Name}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -83,59 +81,92 @@ function SignUp() {
                         alert("We know you!! Sign In");
                     else {
                         setStatusSignUp("registered")
-                      
+
                     }
                 });
         }
     }, [signUp])
 
     const handleInputChange = (event) => {
-        // setSignUp(false);
+        setSignUp(false);
         const { name, value } = event.target;
         setRegisterUser((prevProps) => ({
             ...prevProps,
             [name]: value
         }));
     };
-    const handleRegisteredChange = (event) => {
+
+    const handleUserChange = (event) => {
+        setPost(false)
         const { name, value } = event.target;
         setUser((prevProps) => ({
             ...prevProps,
             [name]: value
         }))
-        console.log(user);
     }
-    const handleRegisteredAddressChange = (event) => {
+
+    const handleAddressChange = (event) => {
         const { name, value } = event.target;
         setAddress((prevProps) => ({
             ...prevProps,
             [name]: value
         }))
-        console.log(address);
     }
 
-    const handleRegistered = (event) => {
-        // console.log("handle Registered")
-        event.preventDefault();
+    const handleCompanyChange = (event) => {
+        const { name, value } = event.target;
+        setCompany((prevProps) => ({
+            ...prevProps,
+            [name]: value
+        }))
+    }
 
-        // setUser((prevProps) => ({
-        //     ...prevProps,
-        //     address: address
-        // }));
-        // console.log(user)
-        // setSignUp(true);
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user)
-        };
-        fetch('http://localhost:3000/users', requestOptions)
-        .then(response => response.json())
-        .then(data => alert("ff"));
+    const handleGeoChange = (event) => {
+        const { name, value } = event.target;
+        setGeo((prevProps) => ({
+            ...prevProps,
+            [name]: value
+        }))
+    }
+
+
+    useEffect(() => {
+        if (post) {
+            console.log (user)
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            };
+            fetch('http://localhost:3000/users', requestOptions)
+                .then(response => response.json())
+                .then(data => alert(data));
+        }
      
+    }, [post])
 
+    function handleRegistered(event) {
+        console.log("handle Registered")
+        event.preventDefault();
+        setUser({
+            id: "1",
+            name: user.name,
+            username: registerUser.Name,
+            email: user.email,
+            address: {
+                street: address.street,
+                suite: address.suite,
+                city: address.city,
+                zipcode: address.zipcode,
+                geo: geo
+            },
+            phone: user.phone,
+            website: registerUser.Password,
+            company: company,
+        });
+        setPost(true)
     }
- 
+
     const handleSubmit = (event) => {
         console.log("handle")
         event.preventDefault();
@@ -186,21 +217,21 @@ function SignUp() {
                         <button type="submit">Sign Up</button>
                     </form>
                     : <form onSubmit={handleRegistered}>
-                        {/* <input
+                        <input
                             type="text"
                             placeholder="Name"
                             name="name"
                             value={user.name}
-                            onChange={dd}
+                            onChange={handleUserChange}
                             required
-                        /> 
-                       <br />
+                        />
+                        <br />
                         <input
                             type="email"
                             placeholder="email"
                             name="email"
                             value={user.email}
-                            onChange={handleRegisteredChange}
+                            onChange={handleUserChange}
                             required
                         />
                         <br />
@@ -209,7 +240,7 @@ function SignUp() {
                             placeholder="phone"
                             name="phone"
                             value={user.phone}
-                            onChange={handleRegisteredChange}
+                            onChange={handleUserChange}
                             required
                         />
                         <br />
@@ -219,17 +250,17 @@ function SignUp() {
                             type="text"
                             placeholder="street"
                             name="street"
-                            value={user.address.street}
-                            onChange={dd}
+                            value={address.street}
+                            onChange={handleAddressChange}
                             required
                         />
                         <br />
-                           <input
+                        <input
                             type="text"
                             placeholder="suite"
                             name="suite"
                             value={address.suite}
-                            onChange={handleRegisteredAddressChange}
+                            onChange={handleAddressChange}
                             required
                         />
                         <br />
@@ -238,7 +269,7 @@ function SignUp() {
                             placeholder="city"
                             name="city"
                             value={address.city}
-                            onChange={handleRegisteredAddressChange}
+                            onChange={handleAddressChange}
                             required
                         />
                         <br />
@@ -247,7 +278,7 @@ function SignUp() {
                             placeholder="zipcode"
                             name="zipcode"
                             value={address.zipcode}
-                            onChange={handleRegisteredAddressChange}
+                            onChange={handleAddressChange}
                             required
                         />
                         <br />
@@ -256,50 +287,50 @@ function SignUp() {
                         <input
                             type="text"
                             placeholder="lat"
-                            name="geo.lat"
-                            value={address.geo.lat}
-                            onChange={handleRegisteredAddressChange}
+                            name="lat"
+                            value={geo.lat}
+                            onChange={handleGeoChange}
                             required
                         />
                         <br />
-                      <input
+                        <input
                             type="text"
                             placeholder="lng"
                             name="lng"
-                            value={address.geo.lng}
-                            onChange={handleRegisteredAddressChange}
+                            value={geo.lng}
+                            onChange={handleGeoChange}
                             required
-                        /> 
+                        />
 
-                      // <br />
-                        // <span> company:</span>
-                        // <br />
-                        // <input
-                        //     type="text"
-                        //     placeholder="name"
-                        //     name="name"
-                        //     value={user.company.name}
-                        //     onChange={handleRegisteredChange(event.target, setUser)}
-                        //     required
-                        // />
-                        // <br />
-                        // <input
-                        //     type="text"
-                        //     placeholder="catchPhrase"
-                        //     name="catchPhrase"
-                        //     value={user.company.catchPhrase}
-                        //     onChange={handleRegisteredChange(event.target, setUser)}
-                        //     required
-                        // />
-                        // <br />
-                        // <input
-                        //     type="text"
-                        //     placeholder="bs"
-                        //     name="bs"
-                        //     value={user.company.bs}
-                        //     onChange={handleRegisteredChange(event.target, setUser)}
-                        //     required
-                        // /> */}
+                        <br />
+                        <span> company:</span>
+                        <br />
+                        <input
+                            type="text"
+                            placeholder="name"
+                            name="name"
+                            value={company.name}
+                            onChange={handleCompanyChange}
+                            required
+                        />
+                        <br />
+                        <input
+                            type="text"
+                            placeholder="catchPhrase"
+                            name="catchPhrase"
+                            value={company.catchPhrase}
+                            onChange={handleCompanyChange}
+                            required
+                        />
+                        <br />
+                        <input
+                            type="text"
+                            placeholder="bs"
+                            name="bs"
+                            value={company.bs}
+                            onChange={handleCompanyChange}
+                            required
+                        />
                         <br />
                         <button type="submit">Add</button>
                     </form>}
@@ -310,28 +341,3 @@ function SignUp() {
 
 export default SignUp;
 
-// const [user ,setUser] = useState(
-//     {
-//         "id": "",
-//         "name": "",
-//         "username": "",
-//         "email": "",
-//         "address": {
-//           "street": "",
-//           "suite": "",
-//           "city": "",
-//           "zipcode": "",
-//           "geo": {
-//             "lat": "",
-//             "lng": ""
-//           }
-//         },
-//         "phone": "",
-//         "website": "",
-//         "company": {
-//           "name": "",
-//           "catchPhrase": "",
-//           "bs": ""
-//         }
-//       }
-// );
