@@ -106,7 +106,8 @@ function SignUp() {
                 .then((data) => {
                     console.log(data)
                     localStorage.setItem("currentUser", JSON.stringify(data))
-                    navigate(`/users/${data[0].id}`);
+                    console.log("iiii");
+                    navigate(`/users/${data.id}`);
                 });
         }
 

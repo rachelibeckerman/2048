@@ -1,14 +1,14 @@
 import React from "react";
 import { Router, useLocation } from "react-router-dom";
 function Info() {
-    const user = useLocation().state[0]
+    const user = useLocation().state;
     console.log(user)
 
     return (
         <>
             <h1>Info</h1>
             <span>
-                "<b>{user.name}</b>
+                <b>{user.name}</b>
                 <br />
                 username : {user.username}   <br />
                 email : {user.email}  <br />
@@ -31,7 +31,7 @@ function Info() {
                 <br />
                 name: {user.company.name} <br />
                 catchPhrase: {user.company.catchPhrase} <br />
-                bs: {user.company.bs}" <br />
+                bs: {user.company.bs} <br />
             </span>
         </>
     )
