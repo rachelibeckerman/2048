@@ -104,9 +104,7 @@ function SignUp() {
             fetch('http://localhost:3000/users', requestOptions)
                 .then(response => response.json())
                 .then((data) => {
-                    console.log(data)
                     localStorage.setItem("currentUser", JSON.stringify(data))
-                    console.log("iiii");
                     navigate(`/users/${data.id}`);
                 });
         }
