@@ -6,7 +6,6 @@ function Todos() {
 
     const [data, setData] = useState(null);
     const user = useLocation().state;
-    console.log(user.id)
 
     useEffect(() => {
         fetch(`http://localhost:3000/todos?userId=${user.id}`)
@@ -33,12 +32,31 @@ function Todos() {
         { value: "random", label: "random" }
     ]
     const hh = (event) => {
-        console.log(event.target.value)
+        console.log(event.value)
+        const dataToSort = [...data];
+        switch (event.value) {
+            case "serial":
+                dataToSort.sort((a, b) => Number(a.id) - Number(b.id))
+                break;
+            case "status":
+                dataToSort.sort((a, b) => Number(b.completed) - Number(a.completed))
+               break;
+            case "alphabetically":
+                dataToSort.sort((a, b) => a.title > b.title ? 1 : -1,)
+                break;
+            case "random":
+                setData(dataToSort.sort(() => Math.random() - 0.5))
+                break
+        }
+        setData(dataToSort)
     }
+
     return (
         <>
-            <Select options={options} onChange={hh} />
+
             <h1>Todos</h1>
+
+            <Select options={options} onChange={hh} />
             {data &&
                 data.map((item) => {
                     console.log(item.completed)

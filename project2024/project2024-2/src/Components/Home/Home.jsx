@@ -4,9 +4,16 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 function Home() {
     const navigate = useNavigate()
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))[0];
+
+    // useEffect(() => {
+    //     fetch(`http://localhost:3000/users/${user.id}`)
+    //         .then((res) => res.json())
+    //         .then((data) => { setData(data); console.log(data) });
+    // }, []);
+//לחפש בסקימבה איך לקחת את התז נראה לי useSerchParam
+
     const logOut = () => {
         localStorage.removeItem("currentUser");
-
         window.history.replaceState(null, null, '/');
         navigate('/');
     }
