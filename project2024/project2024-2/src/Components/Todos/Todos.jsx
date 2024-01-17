@@ -4,20 +4,35 @@ import Select from "react-select"
 import "./Todos.css"
 function Todos() {
 
+    const user = useLocation().state;
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
+    const [searchDb, setSearchDb] = useState(null)
     const [search, setSearch] = useState({
         name: "",
-        value: ""
+        value: "",
+        btnClick: false
     })
-    const user = useLocation().state;
-    console.log(data);
+
+    const searchOptions = [
+        { value: "id", label: "id" },
+        { value: "title", label: "title" },
+        { value: "completed", label: "completed" },
+    ];
+
+    const sortOptions = [
+        { value: "serial", label: "serial" },
+        { value: "status", label: "status" },
+        { value: "alphabetically", label: "alphabetically" },
+        { value: "random", label: "random" }
+    ]
 
     useEffect(() => {
         fetch(`http://localhost:3000/todos?userId=${user.id}`)
             .then((res) => res.json())
             .then((data) => { setData(data); console.log(data) });
     }, []);
+
 
     const changeTodoStatus = (event) => {
         const requestOptions = {
@@ -35,12 +50,6 @@ function Todos() {
             });
     }
 
-    const sortOptions = [
-        { value: "serial", label: "serial" },
-        { value: "status", label: "status" },
-        { value: "alphabetically", label: "alphabetically" },
-        { value: "random", label: "random" }
-    ]
 
     const sortData = (event) => {
         const dataToSort = [...data];
@@ -93,52 +102,71 @@ function Todos() {
 
     const updateTodo = (event) => {
         const res = prompt("The new todos title:");
-        const requestOptions = {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: res })
-        };
-        fetch(`http://localhost:3000/todos/${event.target.className}`, requestOptions)
-            .then(response => response.json())
-            .then((dt) => {
-                const newData = [...data];
-                const index = data.findIndex(todo => todo.id === event.target.className)
-                newData[index] = dt;
-                setData(newData);
-            });
+        if (res) {
+            const requestOptions = {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: res })
+            };
+            fetch(`http://localhost:3000/todos/${event.target.className}`, requestOptions)
+                .then(response => response.json())
+                .then((dt) => {
+                    const newData = [...data];
+                    const index = data.findIndex(todo => todo.id === event.target.className)
+                    newData[index] = dt;
+                    setData(newData);
+                });
+        }
     }
-
     const addTodo = () => {
         const newTitle = prompt("The new todos:");
-        const todos = {
-            userId: `${user.id}`,
-            id: `${nextId}`,
-            title: `${newTitle}`,
-            completed: false,
+        if (newTitle) {
+            const todos = {
+                userId: `${user.id}`,
+                id: `${nextId}`,
+                title: `${newTitle}`,
+                completed: false,
+            }
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(todos)
+            };
+            fetch('http://localhost:3000/todos', requestOptions)
+                .then(response => response.json())
+                .then((dt) => {
+                    setData([...data, dt])
+                });
+            NextId();
         }
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(todos)
-        };
-        fetch('http://localhost:3000/todos', requestOptions)
-            .then(response => response.json())
-            .then((dt) => {
-                setData([...data, dt])
-            });
-        NextId();
     }
 
-    const searchOptions = [
-        { value: "id", label: "id" },
-        { value: "title", label: "title" },
-        { value: "completed", label: "completed" },
-    ];
 
-    // const searchTodo = () => {
-    //     console.log("search")
-    //     console.log(search)
-    // }
+    const searchData = () => {
+        setSearch((prevProps) => ({
+            ...prevProps,
+            btnClick: true
+        }))
+        switch (search.name) {
+            case "id": {
+                const dataToSearch = data.filter((value) => value.id == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+            case "title": {
+                const dataToSearch = data.filter((todo) => todo.title == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+            case "completed": {
+                const dataToSearch = data.filter((todo) => `${todo.completed}` == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+        }
+    }
+
+    const db = search.btnClick ? searchDb : data
 
     return (
         <>
@@ -146,17 +174,20 @@ function Todos() {
             <h1>Todos</h1>
 
             <Select options={sortOptions} onChange={sortData} />
-            {/* <Select style={{ width: "400px" }} options={searchOptions} onChange={(event) => setSearch([...search, {name: event.value} ])} />
-            <input type="text" className="searchTxt" onChange={(event) => setSearch([...search, { value: event.target.value }])} />
-            <button onClick={searchTodo}>search</button> */}
+            <div>
+                <Select options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
+                <button onClick={searchData}>search</button>
+                <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
+            </div>
+
             <br />
             <button onClick={addTodo}>add</button>
-            {data &&
-                data.map((item) => {
+            {db  &&
+                db.map((item) => {
                     console.log(item.completed)
                     return <table key={item.id}>
                         <tr>
-
                             <td>
                                 <input type="checkbox" className={item.id} defaultChecked={item.completed} onChange={changeTodoStatus} />
                             </td>
@@ -170,9 +201,9 @@ function Todos() {
                                 <button className={item.id} onClick={updateTodo}>update</button>
                             </td>
                         </tr>
-
                     </table>
-                })}
+                }) 
+            }
         </>
     );
 
