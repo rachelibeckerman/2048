@@ -6,6 +6,10 @@ function Todos() {
 
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
+    const [search, setSearch] = useState({
+        name: "",
+        value: ""
+    })
     const user = useLocation().state;
     console.log(data);
 
@@ -31,7 +35,7 @@ function Todos() {
             });
     }
 
-    const options = [
+    const sortOptions = [
         { value: "serial", label: "serial" },
         { value: "status", label: "status" },
         { value: "alphabetically", label: "alphabetically" },
@@ -125,15 +129,30 @@ function Todos() {
         NextId();
     }
 
+    const searchOptions = [
+        { value: "id", label: "id" },
+        { value: "title", label: "title" },
+        { value: "completed", label: "completed" },
+    ];
+
+    // const searchTodo = () => {
+    //     console.log("search")
+    //     console.log(search)
+    // }
+
     return (
         <>
 
             <h1>Todos</h1>
 
-            <Select options={options} onChange={sortData} />
+            <Select options={sortOptions} onChange={sortData} />
+            {/* <Select style={{ width: "400px" }} options={searchOptions} onChange={(event) => setSearch([...search, {name: event.value} ])} />
+            <input type="text" className="searchTxt" onChange={(event) => setSearch([...search, { value: event.target.value }])} />
+            <button onClick={searchTodo}>search</button> */}
+            <br />
             <button onClick={addTodo}>add</button>
             {data &&
-                data.map((item, i) => {
+                data.map((item) => {
                     console.log(item.completed)
                     return <table key={item.id}>
                         <tr>
@@ -142,7 +161,7 @@ function Todos() {
                                 <input type="checkbox" className={item.id} defaultChecked={item.completed} onChange={changeTodoStatus} />
                             </td>
                             <td>
-                                <label>{i + 1}:  {item.title}</label>
+                                <label>{item.id}:  {item.title}</label>
                             </td>
                             <td>
                                 <button className={item.id} onClick={deleteTodo} >delete </button>
