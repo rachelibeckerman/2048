@@ -30,6 +30,7 @@ function Todos() {
                 setData(newData)
             });
     }
+
     const options = [
         { value: "serial", label: "serial" },
         { value: "status", label: "status" },
@@ -38,7 +39,6 @@ function Todos() {
     ]
 
     const sortData = (event) => {
-        console.log(event.value)
         const dataToSort = [...data];
         switch (event.value) {
             case "serial":
@@ -58,10 +58,9 @@ function Todos() {
     }
 
     const deleteTodo = (event) => {
-        console.log(event.target.className)
         const id = event.target.className;
         fetch(`http://localhost:3000/todos/${id}`, {
-            method: "DELETE",
+            method: "DELETE"
         })
             .then(response => response.json())
             .then(() => {
@@ -76,10 +75,17 @@ function Todos() {
         fetch(`http://localhost:3000/nextId/1`)
             .then((res) => res.json())
             .then((dt) => {
-                console.log(dt)
                 setNextId(dt.todos)
             })
-    }, [nextId])
+    }, []);
+
+    const NextId = () => {
+        fetch('http://localhost:3000/nextId/1', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ todos: `${parseInt(nextId) + 1}` })
+        }).then(response => response.json()).then(dt => { setNextId(dt.todos) });
+    }
 
     const updateTodo = (event) => {
         const res = prompt("The new todos title:");
@@ -94,11 +100,11 @@ function Todos() {
                 const newData = [...data];
                 const index = data.findIndex(todo => todo.id === event.target.className)
                 newData[index] = dt;
-                setData(newData)
+                setData(newData);
             });
     }
+
     const addTodo = () => {
-       
         const newTitle = prompt("The new todos:");
         const todos = {
             userId: `${user.id}`,
@@ -116,13 +122,9 @@ function Todos() {
             .then((dt) => {
                 setData([...data, dt])
             });
-        fetch('http://localhost:3000/nextId/1', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ todos: `${parseInt(nextId) + 1}` })
-        }).then(response => response.json()).then();
-        setNextId(nextId+1);
+        NextId();
     }
+
     return (
         <>
 
