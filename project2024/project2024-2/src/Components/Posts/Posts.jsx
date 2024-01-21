@@ -2,11 +2,15 @@ import React from "react";
 import { useState,useEffect } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
 import Select from "react-select"
+import Comments from "../comments/comments";
+
 function Posts() {
     const user = useLocation().state;
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
-    const [searchDb, setSearchDb] = useState(null)
+    const [searchDb, setSearchDb] = useState(null);
+    const [moreInfo,setMoreInfo]=useState([])
+    const [stateComments,setStateComments]=useState([])
     const [search, setSearch] = useState({
         name: "",
         value: "",
@@ -17,7 +21,7 @@ function Posts() {
         { value: "id", label: "id" },
         { value: "title", label: "title" },
     ];
-
+  
     const searchData = () => {
         setSearch((prevProps) => ({
             ...prevProps,
@@ -30,7 +34,7 @@ function Posts() {
                 break;
             }
             case "title": {
-                const dataToSearch = data.filter((post) => post.title == search.value)
+                const dataToSearch = data.filter((post) => post.title.includes(search.value))
                 setSearchDb(dataToSearch)
                 break;
             }
@@ -40,7 +44,7 @@ function Posts() {
     useEffect(() => {
         fetch(`http://localhost:3000/post?userId=${user.id}`)
             .then((res) => res.json())
-            .then((data) => { setData(data); console.log(data) });
+            .then((data) => { setData(data); });
     }, []);
 
     useEffect(() => {
@@ -95,8 +99,6 @@ function Posts() {
     const addPost = () => {
         const newTitle = prompt("The new post title:");
         const newBody = prompt("The new post body:");
-        console.log("console.log")
-        console.log(nextId)
        
         if (newTitle) {
             const post = {
@@ -118,6 +120,21 @@ function Posts() {
             NextId();
         }
     }
+    const showMoreLess=(id,setName)=>{
+     switch(setName){
+        case "comments":{
+            stateComments.includes(id.toString())
+        ? setStateComments( stateComments.filter(comm=>comm!=id))
+        : setStateComments([...stateComments,id])
+     }
+        break;
+        case "post":
+            moreInfo.includes(id.toString())
+            ? setMoreInfo( moreInfo.filter(post=>post!=id) )
+            : setMoreInfo([...moreInfo,id])
+            break;
+     }
+    }
 
     const db = search.btnClick ? searchDb : data
     return (
@@ -132,26 +149,38 @@ function Posts() {
             </div>
                 {db  &&
                 db.map((item) => {
-                    console.log(item.completed)
+                  
                     return <table key={item.id}>
+                        <tbody>
                         <tr>
-                            <td>
-                                <label>{item.id}: {item.title}</label>
+                            <td >
+                                {/* <div >{item.id}. {moreInfo.includes(item.id.toString())? <div style={{border: "1px solid black"}}><b>{item.title}</b><br/>{item.body}</div>:<div style={{border: "1px solid black"}}>{item.title}</div>} </div> */}
+                                <div style={{border: "1px solid black"}}>{item.id}. {moreInfo.includes(item.id.toString())? <><b>{item.title}</b><br/>{item.body}</>:<>{item.title}</>} </div>
+
+                                {stateComments && stateComments.includes(item.id.toString())&& <Comments id={item.id}/>}
                             </td>
+           <td>
+                      <button onClick={()=>showMoreLess(item.id,"comments")}>comments</button>
+            </td> 
                             <td>
                                 <button className={item.id} onClick={deletePost} >delete </button>
                             </td>
                             <td>
                                 <button className={item.id} onClick={updatePost}>update</button>
                             </td>
-                           
+                            <td>
+                                <button className={item.id} onClick={()=>showMoreLess(item.id,"post")} >             
+                                {moreInfo.includes(item.id.toString())? "-" : "+"}
+                                </button> 
+                            </td>                   
                         </tr>
+                        </tbody>
                     </table>
                 }) 
             }
         </>
-    );
-}
+    )
+        }
 
 export default Posts;
 

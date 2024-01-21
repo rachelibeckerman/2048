@@ -33,6 +33,13 @@ function Todos() {
             .then((data) => { setData(data); console.log(data) });
     }, []);
 
+    useEffect(() => {
+        fetch(`http://localhost:3000/nextId/1`)
+            .then((res) => res.json())
+            .then((dt) => {
+                setNextId(dt.todos)
+            })
+    }, []);
 
     const changeTodoStatus = (event) => {
         const requestOptions = {
@@ -49,7 +56,6 @@ function Todos() {
                 setData(newData)
             });
     }
-
 
     const sortData = (event) => {
         const dataToSort = [...data];
@@ -83,14 +89,6 @@ function Todos() {
                 alert(`The task with the ID=${id} was successfully deleted`);
             })
     }
-
-    useEffect(() => {
-        fetch(`http://localhost:3000/nextId/1`)
-            .then((res) => res.json())
-            .then((dt) => {
-                setNextId(dt.todos)
-            })
-    }, []);
 
     const NextId = () => {
         fetch('http://localhost:3000/nextId/1', {
