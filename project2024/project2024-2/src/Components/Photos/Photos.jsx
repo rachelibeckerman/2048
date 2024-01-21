@@ -6,16 +6,27 @@ import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
 function Photos(props) {
-    const user = useLocation().state;
+  
     const [data, setData] = useState(null);
-    // const parallax = useParallax({ speed: -10 })
-    console.log(props.id)
+    const [scroll, setScroll] = useState(
+        {
+            start: 0,
+            end: 10
+        }
+    )
+  
     useEffect(() => {
 
-        fetch(`http://localhost:3000/photos/?albumId=${props.id}`)
+        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
             .then((res) => res.json())
             .then((data) => { setData(data); console.log(data) });
     }, []);
+    useEffect(() => {
+
+        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+            .then((res) => res.json())
+            .then((data) => { setData(data); console.log(data) });
+    }, [scroll]);
     const updatePhoto = (event) => {
         const index = data.findIndex(photo => photo.id === event.target.className)
         const newTitle = prompt("The new newTitle name:");
@@ -51,10 +62,16 @@ function Photos(props) {
                 alert(`The photo was successfully deleted`);
             })
     }
-
+    const displayMorePhotos = () => {
+        setScroll((prevProps) => ({
+            ...prevProps,
+            end: scroll.end+10
+        }))
+    }
     return (
         <>
             <br />
+
             {data && data.length > 0 ? <h4>photos:</h4> : <h4>no photos</h4>}
             {data && data.map((item, i) => {
                 return <div key={i} >
@@ -69,6 +86,7 @@ function Photos(props) {
                     </button>
                 </div>
             })}
+             {data && <button onClick={() => displayMorePhotos()}>more</button>}
 
 
         </>

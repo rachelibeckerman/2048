@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
 import Select from "react-select"
 import Photos from "../Photos/Photos";
-
+import './Albums.css'
 function Albums() {
     const user = useLocation().state;
     const [data, setData] = useState(null);
@@ -109,7 +109,7 @@ function Albums() {
                         <tbody>
                             <tr>
                                 <td>
-                                    <label onClick={() => showMoreLess(item.id)} >{item.id}:  {item.title}</label>
+                                    <Link className="linkAlbums" onClick={() => showMoreLess(item.id)} >{item.id}:  {item.title}</Link>
                                     {statePhotos && statePhotos.includes(item.id.toString()) && <Photos id={item.id} />}
                                 </td>
                                 <td>
