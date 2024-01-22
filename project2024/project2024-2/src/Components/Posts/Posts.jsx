@@ -1,6 +1,6 @@
 import React from "react";
 import { useState,useEffect } from "react";
-import { Form, Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Select from "react-select"
 import Comments from "../comments/comments";
 
@@ -21,25 +21,6 @@ function Posts() {
         { value: "id", label: "id" },
         { value: "title", label: "title" },
     ];
-  
-    const searchData = () => {
-        setSearch((prevProps) => ({
-            ...prevProps,
-            btnClick: true
-        }))
-        switch (search.name) {
-            case "id": {
-                const dataToSearch = data.filter((post) => post.id == search.value)
-                setSearchDb(dataToSearch)
-                break;
-            }
-            case "title": {
-                const dataToSearch = data.filter((post) => post.title.includes(search.value))
-                setSearchDb(dataToSearch)
-                break;
-            }
-        }
-    }
 
     useEffect(() => {
         fetch(`http://localhost:3000/post?userId=${user.id}`)
@@ -61,6 +42,25 @@ function Posts() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post: `${parseInt(nextId) + 1}` })
         }).then(response => response.json()).then(dt => { setNextId(dt.post) });
+    }
+
+    const searchData = () => {
+        setSearch((prevProps) => ({
+            ...prevProps,
+            btnClick: true
+        }))
+        switch (search.name) {
+            case "id": {
+                const dataToSearch = data.filter((post) => post.id == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+            case "title": {
+                const dataToSearch = data.filter((post) => post.title.includes(search.value))
+                setSearchDb(dataToSearch)
+                break;
+            }
+        }
     }
 
     const deletePost = (event) => {
@@ -99,8 +99,7 @@ function Posts() {
     const addPost = () => {
         const newTitle = prompt("The new post title:");
         const newBody = prompt("The new post body:");
-       
-        if (newTitle) {
+        if (newTitle && newBody) {
             const post = {
                 userId: `${user.id}`,
                 id: `${nextId}`,
@@ -120,33 +119,35 @@ function Posts() {
             NextId();
         }
     }
+
     const showMoreLess=(id,setName)=>{
      switch(setName){
-        case "comments":{
+        case "comments": {
             stateComments.includes(id.toString())
         ? setStateComments( stateComments.filter(comm=>comm!=id))
         : setStateComments([...stateComments,id])
-     }
+        }
         break;
-        case "post":
+        case "post": {
             moreInfo.includes(id.toString())
             ? setMoreInfo( moreInfo.filter(post=>post!=id) )
             : setMoreInfo([...moreInfo,id])
             break;
+        }
      }
     }
-
-    const db = search.btnClick ? searchDb : data
+  
+    const db = search.btnClick ? searchDb : data;
     return (
         <>
         <h1>Posts</h1>
-         <button onClick={addPost}>add</button>
         <div>
+                <button onClick={addPost}>add</button>
                 <Select options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
                 <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
                 <button onClick={searchData}>search</button>
                 <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
-            </div>
+        </div>
                 {db  &&
                 db.map((item) => {
                   
@@ -154,9 +155,7 @@ function Posts() {
                         <tbody>
                         <tr>
                             <td >
-                                {/* <div >{item.id}. {moreInfo.includes(item.id.toString())? <div style={{border: "1px solid black"}}><b>{item.title}</b><br/>{item.body}</div>:<div style={{border: "1px solid black"}}>{item.title}</div>} </div> */}
                                 <div style={{border: "1px solid black"}}>{item.id}. {moreInfo.includes(item.id.toString())? <><b>{item.title}</b><br/>{item.body}</>:<>{item.title}</>} </div>
-
                                 {stateComments && stateComments.includes(item.id.toString())&& <Comments id={item.id}/>}
                             </td>
            <td>
@@ -184,38 +183,4 @@ function Posts() {
 
 export default Posts;
 
-   // const [img, setImg] = useState(-1)
-    // const [idEdit, setIdEdit] = useState(null);
-
-    // let data = [
-    //     {
-    //         id: 1,
-    //         name: 'test 1'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'test 2'
-    //     }
-    // ]
-
-    // return (
-    //     <>
-    //         <h1>posts</h1>
-    //         {data.map((e, idx) => {
-    //             return (
-    //                 img == idx ?
-    //                     (<input placeholder={e.name} style={{ display: idEdit == e.id ? 'block' : 'none' }} />) //<== Conditionaly to appear or not
-    //                     : (
-    //                         <div>
-    //         <p>{e.name}</p>
-    //         <button onClick={() => {
-    //            setImg(true)
-    //            setIdEdit(e.id) //<== set idEdit state here
-    //           } 
-    //          }>edit</button>
-    //       </div>
-    //                     )
-    //             )
-    //         })}
-    //     </>
-    // )
+ 
