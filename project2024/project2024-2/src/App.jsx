@@ -15,10 +15,33 @@ import { useContext } from 'react'
 export const appContax = createContext();
 
 function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({
+
+    id: "",
+    name: "",
+    username: "",
+    email: "",
+    address: {
+      street: "",
+      suite: "",
+      city: "",
+      zipcode: "",
+      geo: {
+        lat: "",
+        lng: ""
+      }
+    },
+    phone: "",
+    website: "",
+    company: {
+      name: "",
+      catchPhrase: "",
+      bs: ""
+    }
+  });
   return (
     <>
-      <appContax.Provider value={{user ,setUser}}>
+      <appContax.Provider value={{ user, setUser }}>
         <Router>
           <Routes>
             <Route path='/' element={<Main />} />

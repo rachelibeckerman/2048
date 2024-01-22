@@ -1,8 +1,10 @@
 import React from "react";
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from "react"
+import { useState, useEffect,useContext } from "react"
+import { appContax } from "../../App";
 function SignUp() {
     const navigate = useNavigate();
+    const {user, setUser} = useContext(appContax);
     const [signUp, setSignUp] = useState(false);
     const [post, setPost] = useState(false);
     const [statusSignUp, setStatusSignUp] = useState("start");
@@ -43,32 +45,32 @@ function SignUp() {
             bs: ""
         }
     );
-    const [user, setUser] = useState(
-        {
+    // const [user, setUser] = useState(
+    //     {
 
-            id: "",
-            name: "",
-            username: "",
-            email: "",
-            address: {
-                street: "",
-                suite: "",
-                city: "",
-                zipcode: "",
-                geo: {
-                    lat: "",
-                    lng: ""
-                }
-            },
-            phone: "",
-            website: "",
-            company: {
-                name: "",
-                catchPhrase: "",
-                bs: ""
-            }
-        }
-    );
+    //         id: "",
+    //         name: "",
+    //         username: "",
+    //         email: "",
+    //         address: {
+    //             street: "",
+    //             suite: "",
+    //             city: "",
+    //             zipcode: "",
+    //             geo: {
+    //                 lat: "",
+    //                 lng: ""
+    //             }
+    //         },
+    //         phone: "",
+    //         website: "",
+    //         company: {
+    //             name: "",
+    //             catchPhrase: "",
+    //             bs: ""
+    //         }
+    //     }
+    // );
 
 
     useEffect(() => {
