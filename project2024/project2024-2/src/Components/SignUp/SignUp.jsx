@@ -1,10 +1,10 @@
 import React from "react";
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useState, useEffect,useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import { appContax } from "../../App";
 function SignUp() {
     const navigate = useNavigate();
-    const {user, setUser} = useContext(appContax);
+    const { user, setUser } = useContext(appContax);
     const [signUp, setSignUp] = useState(false);
     const [post, setPost] = useState(false);
     const [statusSignUp, setStatusSignUp] = useState("start");
@@ -14,18 +14,19 @@ function SignUp() {
             Password: "",
             PasswordConfirm: ""
         }
-    )
+    );
     const [formMasseges, setFormMasseges] = useState(
         {
             Name: "",
             Password: "",
             PasswordConfirm: ""
         }
-    )
+    );
     const [geo, setGeo] = useState({
         lat: "",
         lng: ""
-    })
+    });
+
     const [address, setAddress] = useState(
         {
             street: "",
@@ -37,7 +38,8 @@ function SignUp() {
                 lng: ""
 
             }
-        })
+        });
+
     const [company, setCompany] = useState(
         {
             name: "",
@@ -45,33 +47,6 @@ function SignUp() {
             bs: ""
         }
     );
-    // const [user, setUser] = useState(
-    //     {
-
-    //         id: "",
-    //         name: "",
-    //         username: "",
-    //         email: "",
-    //         address: {
-    //             street: "",
-    //             suite: "",
-    //             city: "",
-    //             zipcode: "",
-    //             geo: {
-    //                 lat: "",
-    //                 lng: ""
-    //             }
-    //         },
-    //         phone: "",
-    //         website: "",
-    //         company: {
-    //             name: "",
-    //             catchPhrase: "",
-    //             bs: ""
-    //         }
-    //     }
-    // );
-
 
     useEffect(() => {
         if (signUp) {
@@ -97,7 +72,6 @@ function SignUp() {
 
     useEffect(() => {
         if (post) {
-            console.log("post")
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -106,7 +80,7 @@ function SignUp() {
             fetch('http://localhost:3000/users', requestOptions)
                 .then(response => response.json())
                 .then((data) => {
-                    localStorage.setItem("currentUser", JSON.stringify(data))
+                    localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
                     navigate(`/users/${data.id}`);
                 });
         }
@@ -157,7 +131,6 @@ function SignUp() {
 
 
     function handleRegistered(event) {
-        console.log("handle Registered")
         event.preventDefault();
         setUser({
             id: user.id,
@@ -184,13 +157,11 @@ function SignUp() {
         fetch('http://localhost:3000/nextId/1', requestOptions)
             .then(response => response.json())
             .then((data) => {
-                console.log(data);
             });
     }
 
 
     const handleSubmit = (event) => {
-        console.log("handle")
         event.preventDefault();
         if (registerUser.Password != registerUser.PasswordConfirm)
             setFormMasseges((prevProps) => ({

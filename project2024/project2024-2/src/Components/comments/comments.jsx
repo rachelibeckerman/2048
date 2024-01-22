@@ -12,7 +12,6 @@ function Comments(props) {
     const { user, setUser } = useContext(appContax);
 
     useEffect(() => {
-        console.log(props.id)
         fetch(`http://localhost:3000/comments?postId=${props.id}`)
             .then((res) => res.json())
             .then((data) => { setData(data); });
@@ -83,7 +82,6 @@ function Comments(props) {
     };
 
     const deleteComment = (event) => {
-        console.log(event.target.className)
         fetch(`http://localhost:3000/comments/${event.target.className}`, {
             method: "DELETE",
             headers: { 'Content-Type': 'application/json' }
@@ -107,11 +105,11 @@ function Comments(props) {
                         <b> from:  {item.name} ,  email: {item.email}:</b>
                         <br /> {item.body}
                         {user.email == item.email &&
-                            <button className={item.id} onClick={updateComment} >
+                            <button className={item.id} onClick={(event) => updateComment(event)} >
                                 <img src={edit} width={"16px"} height={"16px"} />
                             </button>}
                         {user.email == item.email &&
-                            <button className={item.id} onClick={deleteComment} >
+                            <button className={item.id} onClick={(event) => deleteComment(event)} >
                                 <img src={garbage} width={"20px"} height={"19px"} />
                             </button>}
                     </li>

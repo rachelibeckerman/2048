@@ -31,7 +31,7 @@ function Todos() {
     useEffect(() => {
         fetch(`http://localhost:3000/todos?userId=${user.id}`)
             .then((res) => res.json())
-            .then((data) => { setData(data); console.log(data) });
+            .then((data) => { setData(data); });
     }, []);
 
     useEffect(() => {
@@ -184,22 +184,23 @@ function Todos() {
             <button onClick={addTodo}>add</button>
             {db &&
                 db.map((item) => {
-                    console.log(item.completed)
                     return <table key={item.id}>
-                        <tr>
-                            <td>
-                                <input type="checkbox" className={item.id} defaultChecked={item.completed} onChange={changeTodoStatus} />
-                            </td>
-                            <td>
-                                <label>{item.id}:  {item.title}</label>
-                            </td>
-                            <td>
-                                <button className={item.id} onClick={deleteTodo} >delete </button>
-                            </td>
-                            <td>
-                                <button className={item.id} onClick={updateTodo}>update</button>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" className={item.id} defaultChecked={item.completed} onChange={changeTodoStatus} />
+                                </td>
+                                <td>
+                                    <label>{item.id}:  {item.title}</label>
+                                </td>
+                                <td>
+                                    <button className={item.id} onClick={deleteTodo} >delete </button>
+                                </td>
+                                <td>
+                                    <button className={item.id} onClick={updateTodo}>update</button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 })
             }
