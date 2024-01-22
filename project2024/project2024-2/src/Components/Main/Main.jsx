@@ -7,11 +7,8 @@ function Main() {
 
     const navigate = useNavigate();
 
-
-
     return (<>
         <h1>Main</h1>
-
         <button onClick={()=>{navigate('/login')}}>Sign in</button>
         <button onClick={()=>{navigate('/register')}}>Sign up</button> 
     </>

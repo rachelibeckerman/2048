@@ -3,10 +3,10 @@ import { useState, useEffect, useContext } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
 import Select from "react-select"
 import Photos from "../Photos/Photos";
-import './Albums.css'
 import { appContax } from "../../App";
-
+import './Albums.css'
 function Albums() {
+
     const [data, setData] = useState(null);
     const [searchDb, setSearchDb] = useState(null);
     const [nextId, setNextId] = useState("");
@@ -16,7 +16,7 @@ function Albums() {
         name: "",
         value: "",
         btnClick: false
-    });
+    })
 
     const searchOptions = [
         { value: "id", label: "id" },
@@ -24,10 +24,11 @@ function Albums() {
     ];
 
     useEffect(() => {
-        fetch(`http://localhost:3000/albums?userId=${user.id}`)
-            .then((res) => res.json())
-            .then((data) => { setData(data); });
-    }, []);
+        user &&
+            fetch(`http://localhost:3000/albums?userId=${user.id}`)
+                .then((res) => res.json())
+                .then((data) => { setData(data); });
+    }, [user]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/nextId/1`)
@@ -86,6 +87,36 @@ function Albums() {
         }
     }
 
+    const addPhoto = () => {
+        const newTitle = prompt("The new photo title:");
+        const newCommentsBody = prompt("The new commont body:");
+        if (newTitle && newCommentsBody) {
+            const comment = {
+                id: `${nextId}`,
+                postId: `${user.id}`,
+                name: `${newTitle}`,
+                email: `${user.email}`,
+                body: `${newCommentsBody}`
+            };
+            //         "albumId": "1",
+            // "id": "1",
+            // "title": "accusamus beatae ad facilis cum similique qui sunt",
+            // "url": "https://via.placeholder.com/600/92c952",
+            // "thumbnailUrl": "https://via.placeholder.com/150/92c952"
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(comment)
+            };
+            fetch('http://localhost:3000/comments', requestOptions)
+                .then(response => response.json())
+                .then((dt) => {
+                    setData([...data, dt])
+                });
+            NextId();
+        }
+    };
+    
     const showMoreLess = (id) => {
         statePhotos.includes(id.toString())
             ? setStatePhotos(statePhotos.filter(comm => comm != id))
@@ -111,6 +142,10 @@ function Albums() {
                                 <td>
                                     <Link className="linkAlbums" onClick={() => showMoreLess(item.id)} >{item.id}:  {item.title}</Link>
                                     {statePhotos && statePhotos.includes(item.id.toString()) && <Photos id={item.id} />}
+                                    <br />
+                                    <button className={item.id} onClick={addPhoto} >
+                                        <img src={garbage} width={"20px"} height={"19px"} />
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

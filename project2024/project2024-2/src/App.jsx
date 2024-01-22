@@ -11,34 +11,35 @@ import Info from './Components/Info/Info'
 import Albums from './Components/Albums/Albums'
 import Posts from './Components/Posts/Posts'
 import Todos from './Components/Todos/Todos'
-import { useContext } from 'react'
 export const appContax = createContext();
 
 function App() {
-  const [user, setUser] = useState({
-
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-    address: {
-      street: "",
-      suite: "",
-      city: "",
-      zipcode: "",
-      geo: {
-        lat: "",
-        lng: ""
-      }
-    },
-    phone: "",
-    website: "",
-    company: {
-      name: "",
-      catchPhrase: "",
-      bs: ""
-    }
-  });
+  const [user, setUser] = useState(
+  //   {
+  //   id: "",
+  //   name: "",
+  //   username: "",
+  //   email: "",
+  //   address: {
+  //     street: "",
+  //     suite: "",
+  //     city: "",
+  //     zipcode: "",
+  //     geo: {
+  //       lat: "",
+  //       lng: ""
+  //     }
+  //   },
+  //   phone: "",
+  //   website: "",
+  //   company: {
+  //     name: "",
+  //     catchPhrase: "",
+  //     bs: ""
+  //   }
+  // }
+  );
+  
   return (
     <>
       <appContax.Provider value={{ user, setUser }}>

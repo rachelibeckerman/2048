@@ -29,10 +29,11 @@ function Todos() {
     ]
 
     useEffect(() => {
-        fetch(`http://localhost:3000/todos?userId=${user.id}`)
-            .then((res) => res.json())
-            .then((data) => { setData(data); });
-    }, []);
+        user &&
+            fetch(`http://localhost:3000/todos?userId=${user.id}`)
+                .then((res) => res.json())
+                .then((data) => { setData(data); });
+    }, [user]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/nextId/1`)

@@ -1,15 +1,19 @@
 import React from "react";
+import {useContext} from "react"
 import { Router, useLocation } from "react-router-dom";
-function Info() {
-    const user = useLocation().state;
-    console.log(user)
+import { appContax } from "../../App";
 
+function Info() {
+    const {user, setUser} = useContext(appContax);
     return (
         <>
+        
             <h1>Info</h1>
+            {user&&
             <span>
                 <b>{user.name}</b>
                 <br />
+               
                 username : {user.username}   <br />
                 
                 email : {user.email}  <br />
@@ -33,7 +37,7 @@ function Info() {
                 name: {user.company.name} <br />
                 catchPhrase: {user.company.catchPhrase} <br />
                 bs: {user.company.bs} <br />
-            </span>
+            </span>}
         </>
     )
 }

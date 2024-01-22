@@ -1,12 +1,14 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
-import { useParallax } from "react-scroll-parallax"
+import { appContax } from "../../App";
+
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
-function Photos(props) {
+function Photos() {
 
+    const { user, setUser } = useContext(appContax);
     const [data, setData] = useState(null);
     const [scroll, setScroll] = useState(
         {
@@ -16,17 +18,17 @@ function Photos(props) {
     )
 
     useEffect(() => {
+        user &&
+            fetch(`http://localhost:3000/photos/?albumId=${user.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+                .then((res) => res.json())
+    }, [user]);
 
-        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
-            .then((res) => res.json())
-            .then((data) => { setData(data);});
-    }, []);
     useEffect(() => {
-
-        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+        fetch(`http://localhost:3000/photos/?albumId=${user.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
             .then((res) => res.json())
             .then((data) => { setData(data); });
     }, [scroll]);
+
     const updatePhoto = (event) => {
         const index = data.findIndex(photo => photo.id === event.target.className)
         const newTitle = prompt("The new newTitle name:");
@@ -61,7 +63,8 @@ function Photos(props) {
                 })
                 alert(`The photo was successfully deleted`);
             })
-    }
+    };
+
     const displayMorePhotos = () => {
         setScroll((prevProps) => ({
             ...prevProps,
