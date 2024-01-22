@@ -1,14 +1,15 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
+import { appContax } from "../../App";
 import Select from "react-select"
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
 function Comments(props) {
-    const user = useLocation().state;
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
+    const { user, setUser } = useContext(appContax);
 
     useEffect(() => {
         console.log(props.id)
@@ -56,11 +57,9 @@ function Comments(props) {
                 });
             NextId();
         }
-    }
+    };
 
     const updateComment = (event) => {
-        console.log("inside")
-        console.log(event.target.className)
         const index = data.findIndex(comm => comm.id === event.target.className)
         const newCommentsName = prompt("The new commont name:");
         const newCommentsBody = prompt("The new commont body:");
@@ -81,7 +80,7 @@ function Comments(props) {
                     setData(newData);
                 });
         }
-    }
+    };
 
     const deleteComment = (event) => {
         console.log(event.target.className)
@@ -96,12 +95,12 @@ function Comments(props) {
                 })
                 alert(`The comment ${event.target.className} was successfully deleted`);
             })
-    }
+    };
 
     return (
         <>
             <br />
-            <h4>comments:</h4> 
+            <h4>comments:</h4>
             {data && data.map((item, i) => {
                 return <div key={i}>
                     <li>
@@ -116,12 +115,10 @@ function Comments(props) {
                                 <img src={garbage} width={"20px"} height={"19px"} />
                             </button>}
                     </li>
-
                 </div>
             })}
             <button onClick={addComments}>add</button>
-
         </>
     )
-}
+};
 export default Comments

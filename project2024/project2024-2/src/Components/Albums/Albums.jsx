@@ -1,22 +1,27 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
 import Select from "react-select"
 import Photos from "../Photos/Photos";
 import './Albums.css'
+import { appContax } from "../../App";
+
 function Albums() {
-    const user = useLocation().state;
     const [data, setData] = useState(null);
-    const [searchDb, setSearchDb] = useState(null)
+    const [searchDb, setSearchDb] = useState(null);
     const [nextId, setNextId] = useState("");
-    const [statePhotos, setStatePhotos] = useState([])
+    const [statePhotos, setStatePhotos] = useState([]);
+    const { user, setUser } = useContext(appContax);
     const [search, setSearch] = useState({
         name: "",
         value: "",
         btnClick: false
-    })
+    });
 
-    console.log(data)
+    const searchOptions = [
+        { value: "id", label: "id" },
+        { value: "title", label: "title" },
+    ];
 
     useEffect(() => {
         fetch(`http://localhost:3000/albums?userId=${user.id}`)
@@ -24,10 +29,21 @@ function Albums() {
             .then((data) => { setData(data); });
     }, []);
 
-    const searchOptions = [
-        { value: "id", label: "id" },
-        { value: "title", label: "title" },
-    ];
+    useEffect(() => {
+        fetch(`http://localhost:3000/nextId/1`)
+            .then((res) => res.json())
+            .then((dt) => {
+                setNextId(dt.albums)
+            })
+    }, []);
+
+    const NextId = () => {
+        fetch('http://localhost:3000/nextId/1', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ albums: `${parseInt(nextId) + 1}` })
+        }).then(response => response.json()).then(dt => { setNextId(dt.albums) });
+    };
 
     const searchData = () => {
         setSearch((prevProps) => ({
@@ -46,22 +62,7 @@ function Albums() {
                 break;
             }
         }
-    }
-    useEffect(() => {
-        fetch(`http://localhost:3000/nextId/1`)
-            .then((res) => res.json())
-            .then((dt) => {
-                setNextId(dt.albums)
-            })
-    }, []);
-
-    const NextId = () => {
-        fetch('http://localhost:3000/nextId/1', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ albums: `${parseInt(nextId) + 1}` })
-        }).then(response => response.json()).then(dt => { setNextId(dt.albums) });
-    }
+    };
 
     const addAlbums = () => {
         const newTitle = prompt("The new albums title:");
@@ -89,8 +90,7 @@ function Albums() {
         statePhotos.includes(id.toString())
             ? setStatePhotos(statePhotos.filter(comm => comm != id))
             : setStatePhotos([...statePhotos, id])
-
-    }
+    };
 
     const db = search.btnClick ? searchDb : data
     return (
@@ -112,15 +112,12 @@ function Albums() {
                                     <Link className="linkAlbums" onClick={() => showMoreLess(item.id)} >{item.id}:  {item.title}</Link>
                                     {statePhotos && statePhotos.includes(item.id.toString()) && <Photos id={item.id} />}
                                 </td>
-                                <td>
-
-                                </td>
                             </tr>
                         </tbody>
                     </table>
                 })
             }
         </>
-    )
-}
+    );
+};
 export default Albums;
