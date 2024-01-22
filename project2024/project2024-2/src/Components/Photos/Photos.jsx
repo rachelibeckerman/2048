@@ -19,13 +19,21 @@ function Photos(props) {
 
         fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
             .then((res) => res.json())
+<<<<<<< HEAD
             .then((data) => { setData(data); });
+=======
+            .then((data) => { setData(data);});
+>>>>>>> 0dd1b0b5b6b87b8bd78b591d0c361e0a2bea78ac
     }, []);
     useEffect(() => {
 
         fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
             .then((res) => res.json())
+<<<<<<< HEAD
             .then((data) => { setData(data);  });
+=======
+            .then((data) => { setData(data); });
+>>>>>>> 0dd1b0b5b6b87b8bd78b591d0c361e0a2bea78ac
     }, [scroll]);
     const updatePhoto = (event) => {
         const index = data.findIndex(photo => photo.id === event.target.className)
