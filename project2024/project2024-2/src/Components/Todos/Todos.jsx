@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Form, useLocation, } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Form, useLocation } from "react-router-dom";
 import Select from "react-select"
 import "./Todos.css"
+import { appContax } from "../../App";
 function Todos() {
 
-    const user = useLocation().state;
+    const { user, setUser } = useContext(appContax);
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
     const [searchDb, setSearchDb] = useState(null)
@@ -41,6 +42,14 @@ function Todos() {
             })
     }, []);
 
+    const NextId = () => {
+        fetch('http://localhost:3000/nextId/1', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ todos: `${parseInt(nextId) + 1}` })
+        }).then(response => response.json()).then(dt => { setNextId(dt.todos) });
+    }
+
     const changeTodoStatus = (event) => {
         const requestOptions = {
             method: 'PATCH',
@@ -76,6 +85,30 @@ function Todos() {
         setData(dataToSort)
     }
 
+    const searchData = () => {
+        setSearch((prevProps) => ({
+            ...prevProps,
+            btnClick: true
+        }))
+        switch (search.name) {
+            case "id": {
+                const dataToSearch = data.filter((value) => value.id == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+            case "title": {
+                const dataToSearch = data.filter((todo) => todo.title == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+            case "completed": {
+                const dataToSearch = data.filter((todo) => `${todo.completed}` == search.value)
+                setSearchDb(dataToSearch)
+                break;
+            }
+        }
+    }
+
     const deleteTodo = (event) => {
         const id = event.target.className;
         fetch(`http://localhost:3000/todos/${id}`, {
@@ -90,13 +123,6 @@ function Todos() {
             })
     }
 
-    const NextId = () => {
-        fetch('http://localhost:3000/nextId/1', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ todos: `${parseInt(nextId) + 1}` })
-        }).then(response => response.json()).then(dt => { setNextId(dt.todos) });
-    }
 
     const updateTodo = (event) => {
         const res = prompt("The new todos title:");
@@ -139,31 +165,6 @@ function Todos() {
         }
     }
 
-
-    const searchData = () => {
-        setSearch((prevProps) => ({
-            ...prevProps,
-            btnClick: true
-        }))
-        switch (search.name) {
-            case "id": {
-                const dataToSearch = data.filter((value) => value.id == search.value)
-                setSearchDb(dataToSearch)
-                break;
-            }
-            case "title": {
-                const dataToSearch = data.filter((todo) => todo.title == search.value)
-                setSearchDb(dataToSearch)
-                break;
-            }
-            case "completed": {
-                const dataToSearch = data.filter((todo) => `${todo.completed}` == search.value)
-                setSearchDb(dataToSearch)
-                break;
-            }
-        }
-    }
-
     const db = search.btnClick ? searchDb : data
 
     return (
@@ -181,7 +182,7 @@ function Todos() {
 
             <br />
             <button onClick={addTodo}>add</button>
-            {db  &&
+            {db &&
                 db.map((item) => {
                     console.log(item.completed)
                     return <table key={item.id}>
@@ -200,7 +201,7 @@ function Todos() {
                             </td>
                         </tr>
                     </table>
-                }) 
+                })
             }
         </>
     );
