@@ -6,7 +6,7 @@ import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
 function Photos(props) {
-  
+
     const [data, setData] = useState(null);
     const [scroll, setScroll] = useState(
         {
@@ -14,7 +14,7 @@ function Photos(props) {
             end: 10
         }
     )
-  
+
     useEffect(() => {
 
         fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
@@ -65,7 +65,7 @@ function Photos(props) {
     const displayMorePhotos = () => {
         setScroll((prevProps) => ({
             ...prevProps,
-            end: scroll.end+10
+            end: scroll.end + 10
         }))
     }
     return (
@@ -86,7 +86,7 @@ function Photos(props) {
                     </button>
                 </div>
             })}
-             {data && <button onClick={() => displayMorePhotos()}>more</button>}
+            {data && <button onClick={() => displayMorePhotos()}>more</button>}
 
 
         </>

@@ -14,7 +14,6 @@ function Login() {
     console.log(user)
     useEffect(() => {
         if (login) {
-            console.log("useffect")
             fetch(`http://localhost:3000/users?username=${loginUser.Name}&&website=${loginUser.Password}`)
                 .then((res) => res.json())
                 .then((data) => {
