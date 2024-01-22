@@ -10,12 +10,7 @@ function Login() {
         Name: "",
         Password: "",
     });
-<<<<<<< HEAD
-    console.log("login")
-    console.log(user)
-=======
-   
->>>>>>> 0dd1b0b5b6b87b8bd78b591d0c361e0a2bea78ac
+
     useEffect(() => {
         if (login) {
             fetch(`http://localhost:3000/users?username=${loginUser.Name}&&website=${loginUser.Password}`)
@@ -24,8 +19,8 @@ function Login() {
                     if (data.length == 0)
                         alert("First time we meet? Sign up")
                     else {
-                        setUser(data);
-                        localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
+                        setUser(data[0]);
+                        localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
                        navigate(`/users/${data[0].id}`);
                     }
                 });

@@ -5,13 +5,11 @@ import { appContax } from "../../App";
 
 function Info() {
     const {user, setUser} = useContext(appContax);
-    console.log("info")
-    console.log(user)
     return (
         <>
         
             <h1>Info</h1>
-            {user.length==1&&
+            {user&&
             <span>
                 <b>{user.name}</b>
                 <br />
@@ -23,8 +21,8 @@ function Info() {
                 <br />
                 address :
                 <br />
-                {/* street: {user.address.street} <br /> */}
-                {/* suite: {user.address.suite} <br />
+                street: {user.address.street} <br />
+                suite: {user.address.suite} <br />
                 city: {user.address.city} <br />
                 zipcode: {user.address.zipcode} <br />
                 <br />
@@ -37,7 +35,7 @@ function Info() {
                 <br />
                 name: {user.company.name} <br />
                 catchPhrase: {user.company.catchPhrase} <br />
-                bs: {user.company.bs} <br /> */}
+                bs: {user.company.bs} <br />
             </span>}
         </>
     )

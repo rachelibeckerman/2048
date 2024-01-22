@@ -6,16 +6,17 @@ import Select from "react-select"
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
-function Comments(props) {
+function Comments() {
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
     const { user, setUser } = useContext(appContax);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/comments?postId=${props.id}`)
-            .then((res) => res.json())
-            .then((data) => { setData(data); });
-    }, []);
+        user &&
+            fetch(`http://localhost:3000/comments?postId=${user.id}`)
+                .then((res) => res.json())
+                .then((data) => { setData(data); });
+    }, [user]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/nextId/1`)
@@ -39,7 +40,7 @@ function Comments(props) {
         if (newCommentsName && newCommentsBody) {
             const comment = {
                 id: `${nextId}`,
-                postId: `${props.id}`,
+                postId: `${user.id}`,
                 name: `${newCommentsName}`,
                 email: `${user.email}`,
                 body: `${newCommentsBody}`

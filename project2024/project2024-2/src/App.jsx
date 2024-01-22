@@ -14,29 +14,32 @@ import Todos from './Components/Todos/Todos'
 export const appContax = createContext();
 
 function App() {
-  const [user, setUser] = useState({
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-    address: {
-      street: "",
-      suite: "",
-      city: "",
-      zipcode: "",
-      geo: {
-        lat: "",
-        lng: ""
-      }
-    },
-    phone: "",
-    website: "",
-    company: {
-      name: "",
-      catchPhrase: "",
-      bs: ""
-    }
-  });
+  const [user, setUser] = useState(
+  //   {
+  //   id: "",
+  //   name: "",
+  //   username: "",
+  //   email: "",
+  //   address: {
+  //     street: "",
+  //     suite: "",
+  //     city: "",
+  //     zipcode: "",
+  //     geo: {
+  //       lat: "",
+  //       lng: ""
+  //     }
+  //   },
+  //   phone: "",
+  //   website: "",
+  //   company: {
+  //     name: "",
+  //     catchPhrase: "",
+  //     bs: ""
+  //   }
+  // }
+  );
+  
   return (
     <>
       <appContax.Provider value={{ user, setUser }}>

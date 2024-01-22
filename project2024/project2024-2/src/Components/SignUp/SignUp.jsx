@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useContext } from "react"
 import { appContax } from "../../App";
+
 function SignUp() {
     const navigate = useNavigate();
     const { user, setUser } = useContext(appContax);
@@ -80,8 +81,11 @@ function SignUp() {
             fetch('http://localhost:3000/users', requestOptions)
                 .then(response => response.json())
                 .then((data) => {
-                    localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
-                    navigate(`/users/${data.id}`);
+                    localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
+                    console.log("data")
+                    console.log(data)
+                  navigate(`/users/${data.id}`);
+                    
                 });
         }
 
@@ -156,8 +160,7 @@ function SignUp() {
         };
         fetch('http://localhost:3000/nextId/1', requestOptions)
             .then(response => response.json())
-            .then((data) => {
-            });
+            .then((data) => {});
     }
 
 
