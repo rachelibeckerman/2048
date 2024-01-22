@@ -1,28 +1,24 @@
 import React from "react";
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect, useContext } from "react"
 import { appContax } from "../../App";
 
 function SignUp() {
     const navigate = useNavigate();
     const { user, setUser } = useContext(appContax);
-    const [signUp, setSignUp] = useState(false);
-    const [post, setPost] = useState(false);
+    const [nextId, setNextId] = useState("");
     const [statusSignUp, setStatusSignUp] = useState("start");
-    const [registerUser, setRegisterUser] = useState(
+    const [signupUser, setSignupUser] = useState(
         {
             Name: "",
             Password: "",
             PasswordConfirm: ""
-        }
-    );
-    const [formMasseges, setFormMasseges] = useState(
-        {
-            Name: "",
-            Password: "",
+        });
+
+    const [formMasseges, setFormMasseges] = useState( {
             PasswordConfirm: ""
-        }
-    );
+        });
+
     const [geo, setGeo] = useState({
         lat: "",
         lng: ""
@@ -50,58 +46,30 @@ function SignUp() {
     );
 
     useEffect(() => {
-        if (signUp) {
-            fetch(`http://localhost:3000/users?username=${registerUser.Name}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.length > 0)
-                        alert("We know you!! Sign In");
-                    else {
-                        setStatusSignUp("registered")
-                        fetch(`http://localhost:3000/nextId/1`)
-                            .then((res) => res.json())
-                            .then((data) => {
-                                setUser((prevProps) => ({
-                                    ...prevProps,
-                                    id: data.user
-                                }))
-                            })
-                    }
-                });
-        }
-    }, [signUp])
+        fetch(`http://localhost:3000/nextId/1`)
+            .then((res) => res.json())
+            .then((dt) => {
+                setNextId(dt.user)
+            })
+    }, []);
 
-    useEffect(() => {
-        if (post) {
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
-            };
-            fetch('http://localhost:3000/users', requestOptions)
-                .then(response => response.json())
-                .then((data) => {
-                    localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
-                    console.log("data")
-                    console.log(data)
-                  navigate(`/users/${data.id}`);
-                    
-                });
-        }
-
-    }, [post])
+    const NextId = () => {
+        fetch('http://localhost:3000/nextId/1', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: `${parseInt(nextId) + 1}` })
+        }).then(response => response.json()).then(dt => { setNextId(dt.user) });
+    }
 
     const handleInputChange = (event) => {
-        setSignUp(false);
         const { name, value } = event.target;
-        setRegisterUser((prevProps) => ({
+        setSignupUser((prevProps) => ({
             ...prevProps,
             [name]: value
         }));
     };
 
     const handleUserChange = (event) => {
-        setPost(false)
         const { name, value } = event.target;
         setUser((prevProps) => ({
             ...prevProps,
@@ -133,13 +101,12 @@ function SignUp() {
         }))
     }
 
-
     function handleRegistered(event) {
         event.preventDefault();
         setUser({
-            id: user.id,
+            id: nextId,
             name: user.name,
-            username: registerUser.Name,
+            username: signupUser.Name,
             email: user.email,
             address: {
                 street: address.street,
@@ -149,30 +116,41 @@ function SignUp() {
                 geo: geo
             },
             phone: user.phone,
-            website: registerUser.Password,
+            website: signupUser.Password,
             company: company
         });
-        setPost(true);
+        NextId();
         const requestOptions = {
-            method: 'PATCH',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user: `${parseInt(user.id) + 1}` })
+            body: JSON.stringify(user)
         };
-        fetch('http://localhost:3000/nextId/1', requestOptions)
+        fetch('http://localhost:3000/users', requestOptions)
             .then(response => response.json())
-            .then((data) => {});
+            .then((data) => {
+                localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
+                navigate(`/users/${data.id}`);
+            });
     }
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (registerUser.Password != registerUser.PasswordConfirm)
+        if (signupUser.Password != signupUser.PasswordConfirm)
             setFormMasseges((prevProps) => ({
                 ...prevProps,
                 PasswordConfirm: "password didn't match"
             }));
         else {
-            setSignUp(true);
+            fetch(`http://localhost:3000/users?username=${signupUser.Name}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.length > 0)
+                        alert("We know you!! Sign In");
+                    else {
+                        setStatusSignUp("registered");
+                    }
+                });
         }
     };
 
@@ -187,7 +165,7 @@ function SignUp() {
                             type="text"
                             placeholder="userName"
                             name="Name"
-                            value={registerUser.Name}
+                            value={signupUser.Name}
                             onChange={handleInputChange}
                             required
                         />
@@ -196,7 +174,7 @@ function SignUp() {
                             type="password"
                             placeholder="password"
                             name="Password"
-                            value={registerUser.Password}
+                            value={signupUser.Password}
                             onChange={handleInputChange}
                             required
                         />
@@ -205,7 +183,7 @@ function SignUp() {
                             type="password"
                             placeholder="confirm password"
                             name="PasswordConfirm"
-                            value={registerUser.PasswordConfirm}
+                            value={signupUser.PasswordConfirm}
                             onChange={handleInputChange}
                             required
                         />
