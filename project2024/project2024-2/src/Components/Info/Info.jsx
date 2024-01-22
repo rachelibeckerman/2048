@@ -11,6 +11,7 @@ function Info() {
                 <b>{user.name}</b>
                 <br />
                 username : {user.username}   <br />
+                
                 email : {user.email}  <br />
                 phone : {user.phone} <br />
                 website : {user.website} <br />
