@@ -1,11 +1,13 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { Form, Link, useLocation } from "react-router-dom";
 import Select from "react-select"
 import Photos from "../Photos/Photos";
+import { appContax } from "../../App";
 import './Albums.css'
+
 function Albums() {
-    const user = useLocation().state;
+    const {user, setUser} = useContext(appContax);
     const [data, setData] = useState(null);
     const [searchDb, setSearchDb] = useState(null)
     const [nextId, setNextId] = useState("");
@@ -15,8 +17,6 @@ function Albums() {
         value: "",
         btnClick: false
     })
-
-    console.log(data)
 
     useEffect(() => {
         fetch(`http://localhost:3000/albums?userId=${user.id}`)

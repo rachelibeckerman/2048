@@ -11,6 +11,7 @@ function Login() {
         Name: "",
         Password: "",
     });
+    console.log("login")
     console.log(user)
     useEffect(() => {
         if (login) {
@@ -38,7 +39,6 @@ function Login() {
     };
 
     const handleSubmit = (event) => {
-        console.log("handle")
         event.preventDefault();
         setLogin(true);
     };
