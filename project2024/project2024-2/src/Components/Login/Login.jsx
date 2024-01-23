@@ -1,15 +1,19 @@
-import React, { useState, useEffect, useRef,useContext } from "react";
-import {  useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useNavigate } from 'react-router-dom'
 import { appContax } from "../../App";
 
 function Login() {
     const navigate = useNavigate();
-    const {user, setUser} = useContext(appContax);
+    const { user, setUser } = useContext(appContax);
     const [login, setLogin] = useState(false)
     const [loginUser, setLoginUser] = useState({
         Name: "",
         Password: "",
     });
+
+    useEffect(() => {
+        navigate("/login")
+    }, [])
 
     useEffect(() => {
         if (login) {
@@ -21,7 +25,7 @@ function Login() {
                     else {
                         setUser(data[0]);
                         localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
-                       navigate(`/users/${data[0].id}`);
+                        navigate(`/users/${data[0].id}`);
                     }
                 });
         }

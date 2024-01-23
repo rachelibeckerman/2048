@@ -1,7 +1,6 @@
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import Main from './Components/Main/Main'
 import { BrowserRouter as Router, Route, Routes, useNavigate, } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login'
@@ -13,39 +12,40 @@ import Posts from './Components/Posts/Posts'
 import Todos from './Components/Todos/Todos'
 export const appContax = createContext();
 
+
 function App() {
   const [user, setUser] = useState(
     {
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-    address: {
-      street: "",
-      suite: "",
-      city: "",
-      zipcode: "",
-      geo: {
-        lat: "",
-        lng: ""
-      }
-    },
-    phone: "",
-    website: "",
-    company: {
+      id: "",
       name: "",
-      catchPhrase: "",
-      bs: ""
+      username: "",
+      email: "",
+      address: {
+        street: "",
+        suite: "",
+        city: "",
+        zipcode: "",
+        geo: {
+          lat: "",
+          lng: ""
+        }
+      },
+      phone: "",
+      website: "",
+      company: {
+        name: "",
+        catchPhrase: "",
+        bs: ""
+      }
     }
-  }
   );
-  
+
   return (
     <>
       <appContax.Provider value={{ user, setUser }}>
         <Router>
           <Routes>
-            <Route path='/' element={<Main />} />
+          <Route path='/' element={<Login />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<SignUp />} />
             <Route path='/users/:id' element={<Home />}>
@@ -60,5 +60,5 @@ function App() {
     </>
   )
 }
-
+{/* <Route path='/' element={<Main />} /> */ }
 export default App

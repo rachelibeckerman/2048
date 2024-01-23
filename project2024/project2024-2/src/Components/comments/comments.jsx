@@ -6,14 +6,14 @@ import Select from "react-select"
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
-function Comments() {
+function Comments(props) {
     const [data, setData] = useState(null);
     const [nextId, setNextId] = useState("");
     const { user, setUser } = useContext(appContax);
 
     useEffect(() => {
         user &&
-            fetch(`http://localhost:3000/comments?postId=${user.id}`)
+            fetch(`http://localhost:3000/comments?postId=${props.id}`)
                 .then((res) => res.json())
                 .then((data) => { setData(data); });
     }, [user]);

@@ -13,14 +13,14 @@ function Home() {
         if (id == userLs.id) {
             fetch(`http://localhost:3000/users/${id}`)
                 .then((res) => res.json())
-                .then((data) => { setUser(data); console.log(data) });
+                .then((data) => { setUser(data);  });
         }
     }, []);
 
     const logOut = () => {
         localStorage.removeItem("currentUser");
         window.history.replaceState(null, null, '/');
-        navigate('/');
+        navigate('/login');
     }
 
     return (

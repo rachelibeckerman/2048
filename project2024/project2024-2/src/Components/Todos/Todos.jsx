@@ -173,9 +173,9 @@ function Todos() {
 
             <h1>Todos</h1>
 
-            <Select options={sortOptions} onChange={sortData} />
+            <Select placeholder={"sort by:"} options={sortOptions} onChange={sortData} />
             <div>
-                <Select options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                <Select placeholder={"search by:"} options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
                 <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
                 <button onClick={searchData}>search</button>
                 <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>

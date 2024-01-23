@@ -48,8 +48,8 @@ function Photos() {
 
     const updatePhoto = (event) => {
         const index = data.findIndex(photo => photo.id === event.target.className)
-        const newTitle = prompt("The new newTitle name:");
-        const newPhoto = prompt("The new photo name:");
+        const newTitle = prompt("The new photo name:");
+        const newPhoto = prompt("The new photo url:");
         if (newTitle || newPhoto) {
             const requestOptions = {
                 method: 'PATCH',
