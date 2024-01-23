@@ -7,6 +7,7 @@ function SignUp() {
     const navigate = useNavigate();
     const { user, setUser } = useContext(appContax);
     const [nextId, setNextId] = useState("");
+    const [userToDb, setUserToDb] = useState(false)
     const [statusSignUp, setStatusSignUp] = useState("start");
     const [signupUser, setSignupUser] = useState(
         {
@@ -15,9 +16,9 @@ function SignUp() {
             PasswordConfirm: ""
         });
 
-    const [formMasseges, setFormMasseges] = useState( {
-            PasswordConfirm: ""
-        });
+    const [formMasseges, setFormMasseges] = useState({
+        PasswordConfirm: ""
+    });
 
     const [geo, setGeo] = useState({
         lat: "",
@@ -53,6 +54,23 @@ function SignUp() {
             })
     }, []);
 
+    useEffect(() => {
+        if (userToDb) {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            };
+            fetch('http://localhost:3000/users', requestOptions)
+                .then(response => response.json())
+                .then((data) => {
+                    NextId();
+                    localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
+                    navigate(`/users/${data.id}`);
+                });
+        }
+    }, [userToDb])
+
     const NextId = () => {
         fetch('http://localhost:3000/nextId/1', {
             method: 'PATCH',
@@ -70,6 +88,7 @@ function SignUp() {
     };
 
     const handleUserChange = (event) => {
+        setUserToDb(false)
         const { name, value } = event.target;
         setUser((prevProps) => ({
             ...prevProps,
@@ -120,20 +139,7 @@ function SignUp() {
             company: company
         };
         setUser(newUser);
-        NextId();
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user)
-        };
-        fetch('http://localhost:3000/users', requestOptions)
-            .then(response => response.json())
-            .then((data) => {
-                console.log("data")
-                console.log(data)
-                localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
-                navigate(`/users/${data.id}`);
-            });
+        setUserToDb(true)
     }
 
 

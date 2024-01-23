@@ -70,6 +70,8 @@ function Photos(props) {
         }
     }
     const deletePhoto = (event) => {
+        console.log(event.target.className);
+        console.log("id")
         fetch(`http://localhost:3000/photos/${event.target.className}`, {
             method: "DELETE"
         })
@@ -125,7 +127,7 @@ function Photos(props) {
                     <button className={item.id} onClick={updatePhoto}>
                         <img src={edit} width={"16px"} height={"16px"} />
                     </button>
-                    <button className={item.id} onClick={deletePhoto} >
+                    <button className={item.id} onClick={(event)=>deletePhoto(event)} >
                         <img src={garbage} width={"20px"} height={"19px"} />
                     </button>
                 </div>
