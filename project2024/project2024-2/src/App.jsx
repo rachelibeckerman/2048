@@ -1,7 +1,5 @@
 import { useState, createContext, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { BrowserRouter as Router, Route, Routes, useNavigate, } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login'
 import SignUp from './Components/SignUp/SignUp'
@@ -45,7 +43,7 @@ function App() {
       <appContax.Provider value={{ user, setUser }}>
         <Router>
           <Routes>
-          <Route path='/' element={<Login />} />
+            <Route path='/' element={<Login />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<SignUp />} />
             <Route path='/users/:id' element={<Home />}>
@@ -60,5 +58,5 @@ function App() {
     </>
   )
 }
-{/* <Route path='/' element={<Main />} /> */ }
+
 export default App

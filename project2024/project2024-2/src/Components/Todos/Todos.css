@@ -1,3 +1,20 @@
-.df{
+.df {
     border: 1px solid black;
+}
+
+
+
+
+
+
+
+button {
+    color: #6F648C;
+    background-color: #BFBEC4;
+    border: 1px solid #6F648C;
+}
+
+button:hover {
+    background-color: #6F648C;
+    color: white;
 }

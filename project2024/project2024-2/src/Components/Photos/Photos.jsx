@@ -22,13 +22,8 @@ function Photos(props) {
         user &&
             fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
                 .then((res) => res.json())
-    }, [user]);
-
-    useEffect(() => {
-        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
-            .then((res) => res.json())
-            .then((data) => { setData(data); });
-    }, [scroll]);
+                .then((data) => { setData(data); });
+    }, [user, scroll]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/nextId/1`)
@@ -55,9 +50,9 @@ function Photos(props) {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    title: newTitle ? newTitle : data[index].name,
-                    url: newPhoto ? newPhoto : data[index].body,
-                    thumbnailUrl: newPhoto ? newPhoto : data[index].body
+                    title: newTitle ? newTitle : data[index].title,
+                    url: newPhoto ? newPhoto : data[index].url,
+                    thumbnailUrl: newPhoto ? newPhoto : data[index].thumbnailUrl
                 })
             };
             fetch(`http://localhost:3000/photos/${event.target.className}`, requestOptions)
@@ -69,16 +64,16 @@ function Photos(props) {
                 });
         }
     }
+    
     const deletePhoto = (event) => {
-        console.log(event.target.className);
-        console.log("id")
-        fetch(`http://localhost:3000/photos/${event.target.className}`, {
+        const id = event.target.className;
+        fetch(`http://localhost:3000/photos/${id}`, {
             method: "DELETE"
         })
             .then(response => response.json())
             .then(() => {
                 setData(comment => {
-                    return comment.filter(item => item.id !== event.target.className)
+                    return comment.filter(item => item.id !== id)
                 })
                 alert(`The photo was successfully deleted`);
             })
@@ -127,7 +122,7 @@ function Photos(props) {
                     <button className={item.id} onClick={updatePhoto}>
                         <img src={edit} width={"16px"} height={"16px"} />
                     </button>
-                    <button className={item.id} onClick={(event)=>deletePhoto(event)} >
+                    <button type="submit" className={item.id} onClick={(event) => deletePhoto(event)} >
                         <img src={garbage} width={"20px"} height={"19px"} />
                     </button>
                 </div>

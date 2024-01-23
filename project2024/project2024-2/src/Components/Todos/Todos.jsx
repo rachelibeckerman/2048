@@ -12,7 +12,7 @@ function Todos() {
     const [search, setSearch] = useState({
         name: "",
         value: "",
-        btnClick: false
+        statusSearch: false
     })
 
     const searchOptions = [
@@ -89,7 +89,7 @@ function Todos() {
     const searchData = () => {
         setSearch((prevProps) => ({
             ...prevProps,
-            btnClick: true
+            statusSearch: true
         }))
         switch (search.name) {
             case "id": {
@@ -98,12 +98,12 @@ function Todos() {
                 break;
             }
             case "title": {
-                const dataToSearch = data.filter((todo) => todo.title.includes(search.value))
+                const dataToSearch = data.filter((value) => value.title.includes(search.value))
                 setSearchDb(dataToSearch)
                 break;
             }
             case "completed": {
-                const dataToSearch = data.filter((todo) => `${todo.completed}` == search.value)
+                const dataToSearch = data.filter((value) => `${value.completed}` == search.value)
                 setSearchDb(dataToSearch)
                 break;
             }
@@ -143,6 +143,7 @@ function Todos() {
                 });
         }
     }
+
     const addTodo = () => {
         const newTitle = prompt("The new todos:");
         if (newTitle) {
@@ -166,23 +167,23 @@ function Todos() {
         }
     }
 
-    const db = search.btnClick ? searchDb : data
+    const db = search.statusSearch ? searchDb : data
 
     return (
         <>
 
             <h1>Todos</h1>
-
-            <Select placeholder={"sort by:"} options={sortOptions} onChange={sortData} />
-            <div>
-                <Select placeholder={"search by:"} options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
-                <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
-                <button onClick={searchData}>search</button>
-                <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
+            <div className="opsitons">
+                <div className="SelectSort"></div>
+                <Select className="select" placeholder={"sort by:"} options={sortOptions} onChange={sortData} />
+                <div className="SelectSearch">
+                    <Select className="select" placeholder={"search by:"} options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                    <input  placeholder="search" type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
+                    <button onClick={searchData}>search</button>
+                    <button onClick={() => setSearch((prevProps) => ({ ...prevProps, statusSearch: false }))}>clear search</button>
+                </div>
+                <button  onClick={addTodo}>add</button>
             </div>
-
-            <br />
-            <button onClick={addTodo}>add</button>
             {db &&
                 db.map((item) => {
                     return <table key={item.id}>

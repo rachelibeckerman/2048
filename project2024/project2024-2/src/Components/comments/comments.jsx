@@ -1,8 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Form, Link, useLocation } from "react-router-dom";
 import { appContax } from "../../App";
-import Select from "react-select"
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 

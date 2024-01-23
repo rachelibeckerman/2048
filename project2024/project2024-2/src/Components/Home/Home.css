@@ -1,0 +1,72 @@
+.linksHome {
+    top:0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #9A92B1;
+    width: 100%;
+    position: fixed;
+}
+.linkHome {
+    width: 70px;
+    height: 15px;
+    text-align: center
+}
+
+.linkHome:hover {
+    width: 70px;
+    height: 60px;
+    background-color: #3C076F;
+    color: white;
+    text-align: center
+}
+
+.logOutButton {
+    width: 70px;
+    height: 60px;
+    background-color: #9A92B1;
+    text-align: center;
+}
+
+.logOutButton:hover {
+    width: 70px;
+    height: 60px;
+    background-color: #3C076F;
+    text-align: center;
+    color: white;
+}
+
+.nameUser{
+    margin-top: 45px;
+}
+
+.select {
+    width: 150px;
+    color: #6F648C;
+    margin-right: 10px;
+    margin-left: 10px;
+    position: static;
+}
+
+.select:hover{
+    background-color: #6F648C;
+    color: white;
+}
+
+.SelectSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #6F648C;
+}
+
+.opsitons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+

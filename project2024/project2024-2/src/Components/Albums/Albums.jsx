@@ -99,12 +99,14 @@ function Albums() {
     return (
         <>
             <h1>Albums</h1>
-            <div>
-                <Select placeholder={"search by:"} options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
-                <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
+            <div className="opsitons">
+            <div className="SelectSearch">
+                <Select className="select" placeholder={"search by:"} options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                <input placeholder="search" type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
                 <button onClick={searchData}>search</button>
                 <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
                 <button onClick={addAlbums}>add</button>
+            </div>
             </div>
             {db &&
                 db.map((item) => {

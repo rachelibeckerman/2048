@@ -7,7 +7,6 @@ function Info() {
     const { user, setUser } = useContext(appContax);
 
     const printUser = (object) => {
-
         return Object.keys(object).map((key) => (typeof object[key] === 'object' ?
             <div key={key} >
                 <br />

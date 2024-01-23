@@ -14,7 +14,7 @@ function Posts() {
     const [search, setSearch] = useState({
         name: "",
         value: "",
-        btnClick: false
+        statusSearch: false
     })
 
     const searchOptions = [
@@ -48,7 +48,7 @@ function Posts() {
     const searchData = () => {
         setSearch((prevProps) => ({
             ...prevProps,
-            btnClick: true
+            statusSearch: true
         }))
         switch (search.name) {
             case "id": {
@@ -138,16 +138,16 @@ function Posts() {
         }
     }
 
-    const db = search.btnClick ? searchDb : data;
+    const db = search.statusSearch ? searchDb : data;
     return (
-        <>
+        <div className="body">
             <h1>Posts</h1>
             <div>
                 <button onClick={addPost}>add</button>
-                <Select options={searchOptions} placeholder={"search by:"} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
-                <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
+                <Select className="select" options={searchOptions} placeholder={"search by:"} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                <input  placeholder="search" type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
                 <button onClick={searchData}>search</button>
-                <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
+                <button onClick={() => setSearch((prevProps) => ({ ...prevProps, statusSearch: false }))}>clear search</button>
             </div>
             {db &&
                 db.map((item) => {
@@ -178,7 +178,7 @@ function Posts() {
                     </table>
                 })
             }
-        </>
+        </div>
     )
 }
 
