@@ -98,7 +98,7 @@ function Todos() {
                 break;
             }
             case "title": {
-                const dataToSearch = data.filter((todo) => todo.title == search.value)
+                const dataToSearch = data.filter((todo) => todo.title.includes(search.value))
                 setSearchDb(dataToSearch)
                 break;
             }

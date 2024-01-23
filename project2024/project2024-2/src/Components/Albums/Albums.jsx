@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Form, Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Select from "react-select"
 import Photos from "../Photos/Photos";
 import { appContax } from "../../App";
@@ -59,7 +59,7 @@ function Albums() {
                 break;
             }
             case "title": {
-                const dataToSearch = data.filter((value) => value.title == search.value)
+                const dataToSearch = data.filter((value) => value.title.includes(search.value))
                 setSearchDb(dataToSearch)
                 break;
             }

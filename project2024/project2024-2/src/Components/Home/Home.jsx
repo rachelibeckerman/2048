@@ -4,6 +4,7 @@ import { useContext } from "react"
 import { appContax } from "../../App";
 
 function Home() {
+    ///////////////////////////////////////////////////
     const navigate = useNavigate()
     const { user, setUser } = useContext(appContax);
     const { id } = useParams();
@@ -32,7 +33,6 @@ function Home() {
             <Link to={"posts"}><div>Posts</div></Link>
             <Link to={"albums"} ><div>Albums</div></Link>
             <Link to={"info"}><div>Info</div></Link>
-
             <Outlet />
         </>
     );

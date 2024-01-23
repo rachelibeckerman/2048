@@ -144,7 +144,7 @@ function Posts() {
             <h1>Posts</h1>
             <div>
                 <button onClick={addPost}>add</button>
-                <Select options={searchOptions} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
+                <Select options={searchOptions} placeholder={"search by:"} onChange={(event) => setSearch((prevProps) => ({ ...prevProps, name: event.value }))} />
                 <input type="text" onChange={(event) => setSearch((prevProps) => ({ ...prevProps, value: event.target.value }))} />
                 <button onClick={searchData}>search</button>
                 <button onClick={() => setSearch((prevProps) => ({ ...prevProps, btnClick: false }))}>clear search</button>
@@ -156,7 +156,7 @@ function Posts() {
                         <tbody>
                             <tr>
                                 <td >
-                                    <div style={{ border: "1px solid black" }}>{item.id}. {moreInfo.includes(item.id.toString()) ? <><b>{item.title}</b><br />{item.body}</> : <>{item.title}</>} </div>
+                                    <div >{moreInfo.includes(item.id.toString()) ? <div style={{ border: "1px solid black", borderRadius: "10px"}}><b>{item.id}.  {item.title}</b><br />{item.body}</div> : <div>{item.id}.  {item.title}</div>} </div>
                                     {stateComments && stateComments.includes(item.id.toString()) && <Comments id={item.id} />}
                                 </td>
                                 <td>

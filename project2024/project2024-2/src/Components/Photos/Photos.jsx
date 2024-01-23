@@ -6,10 +6,10 @@ import addphoto from "../img/addphoto.png"
 import edit from "../img/edit.png"
 import garbage from "../img/garbage.png"
 
-function Photos() {
+function Photos(props) {
 
     const { user, setUser } = useContext(appContax);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState();
     const [nextId, setNextId] = useState("");
     const [scroll, setScroll] = useState(
         {
@@ -20,12 +20,12 @@ function Photos() {
 
     useEffect(() => {
         user &&
-            fetch(`http://localhost:3000/photos/?albumId=${user.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+            fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
                 .then((res) => res.json())
     }, [user]);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/photos/?albumId=${user.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+        fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
             .then((res) => res.json())
             .then((data) => { setData(data); });
     }, [scroll]);
@@ -115,7 +115,7 @@ function Photos() {
     }
     return (
         <>
-            {data && <img className={data[0].albumId} onClick={addPhoto} src={addphoto} width={"30px"} height={"30px"} />}
+            {data && <img className={props.id} onClick={addPhoto} src={addphoto} width={"30px"} height={"30px"} />}
             {data && data.length > 0 ? <h4>photos:</h4> : <h4>no photos</h4>}
             {data && data.map((item, i) => {
                 return <div key={i} >

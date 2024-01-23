@@ -103,7 +103,7 @@ function SignUp() {
 
     function handleRegistered(event) {
         event.preventDefault();
-        setUser({
+        const newUser = {
             id: nextId,
             name: user.name,
             username: signupUser.Name,
@@ -118,7 +118,8 @@ function SignUp() {
             phone: user.phone,
             website: signupUser.Password,
             company: company
-        });
+        };
+        setUser(newUser);
         NextId();
         const requestOptions = {
             method: 'POST',
@@ -128,7 +129,9 @@ function SignUp() {
         fetch('http://localhost:3000/users', requestOptions)
             .then(response => response.json())
             .then((data) => {
-                localStorage.setItem("currentUser", JSON.stringify({ username: data[0].username, id: data[0].id }))
+                console.log("data")
+                console.log(data)
+                localStorage.setItem("currentUser", JSON.stringify({ username: data.username, id: data.id }))
                 navigate(`/users/${data.id}`);
             });
     }
