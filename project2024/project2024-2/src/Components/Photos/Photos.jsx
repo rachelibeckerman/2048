@@ -20,7 +20,7 @@ function Photos(props) {
 
     useEffect(() => {
         user &&
-            fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end}`)
+            fetch(`http://localhost:3000/photos/?albumId=${props.id}&&_start=${scroll.start}&&_end=${scroll.end + 1}`)
                 .then((res) => res.json())
                 .then((data) => { setData(data); });
     }, [user, scroll]);
@@ -64,7 +64,7 @@ function Photos(props) {
                 });
         }
     }
-    
+
     const deletePhoto = (event) => {
         const id = event.target.className;
         fetch(`http://localhost:3000/photos/${id}`, {
@@ -115,19 +115,21 @@ function Photos(props) {
             {data && <img className={props.id} onClick={addPhoto} src={addphoto} width={"30px"} height={"30px"} />}
             {data && data.length > 0 ? <h4>photos:</h4> : <h4>no photos</h4>}
             {data && data.map((item, i) => {
-                return <div key={i} >
-                    {item.title}
-                    <br />
-                    <img width={"150px"} height={"150px"} src={item.thumbnailUrl} />
-                    <button className={item.id} onClick={updatePhoto}>
-                        <img src={edit} width={"16px"} height={"16px"} />
-                    </button>
-                    <button type="submit" className={item.id} onClick={(event) => deletePhoto(event)} >
-                        <img src={garbage} width={"20px"} height={"19px"} />
-                    </button>
-                </div>
+                if (i <= scroll.end) {
+                    return <div key={i} >
+                        {item.title}
+                        <br />
+                        <img width={"150px"} height={"150px"} src={item.thumbnailUrl} />
+                        <button className={item.id} onClick={updatePhoto}>
+                            <img src={edit} width={"16px"} height={"16px"} />
+                        </button>
+                        <button type="submit" className={item.id} onClick={(event) => deletePhoto(event)} >
+                            <img src={garbage} width={"20px"} height={"19px"} />
+                        </button>
+                    </div>
+                }
             })}
-            {data && <button onClick={() => displayMorePhotos()}>more</button>}
+            {data && <button style={data[scroll.end] == null ? { display: "none" } : { display: "contents" }} onClick={() => displayMorePhotos()}>more</button>}
 
 
         </>
