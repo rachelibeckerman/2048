@@ -1,5 +1,5 @@
 .linksHome {
-    top:0;
+    top: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -8,6 +8,7 @@
     width: 100%;
     position: fixed;
 }
+
 .linkHome {
     width: 70px;
     height: 15px;
@@ -37,7 +38,7 @@
     color: white;
 }
 
-.nameUser{
+.nameUser {
     margin-top: 45px;
 }
 
@@ -49,7 +50,7 @@
     position: static;
 }
 
-.select:hover{
+.select:hover {
     background-color: #6F648C;
     color: white;
 }
@@ -69,4 +70,9 @@
     justify-content: space-evenly;
 }
 
-
+.body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
